@@ -1,9 +1,9 @@
-import QShapeCreator from '../creator/shapecreator'
-import QPaintView from '../view'
+import QShapeCreator from './ShapeCreator'
+import QPaintView from '../View'
 import { RectByPoint, normalizeRect } from '../dom/shape'
-import QLine from '../dom/line'
-import QEllipse from '../dom/ellipse'
-import QRect from '../dom/rect'
+import QLine from '../dom/Line'
+import QEllipse from '../dom/Ellipse'
+import QRect from '../dom/Rect'
 
 class QRectCreator extends QShapeCreator {
   private rect: RectByPoint = {
@@ -20,22 +20,23 @@ class QRectCreator extends QShapeCreator {
     this.qview.invalidate(this.rect)
   }
 
-  buildShape() {
+  buildShape(temp = false) {
     let rect = this.rect
     let r = normalizeRect(rect)
     let style = this.qview.style.clone()
+    const id = temp ? '~' : this.getNextShapeId()
     switch (this.shapeType) {
       case "line":
-        return new QLine(rect.pt1, rect.pt2, style)
+        return new QLine(id, rect.pt1, rect.pt2, style)
       case "rect":
-        return new QRect(r, style)
+        return new QRect(id, r, style)
       case "ellipse":
         let rx = r.width / 2
         let ry = r.height / 2
-        return new QEllipse(r.x + rx, r.y + ry, rx, ry, style)
+        return new QEllipse(id, r.x + rx, r.y + ry, rx, ry, style)
       case "circle":
         let rc = Math.sqrt(r.width * r.width + r.height * r.height)
-        return new QEllipse(rect.pt1.x, rect.pt1.y, rc, rc, style)
+        return new QEllipse(id, rect.pt1.x, rect.pt1.y, rc, rc, style)
       default:
         alert("unknown shapeType: " + this.shapeType)
         return null
@@ -72,7 +73,7 @@ class QRectCreator extends QShapeCreator {
 
   onpaint(ctx: CanvasRenderingContext2D) {
     if (this.started) {
-      this.buildShape()!.onpaint(ctx)
+      this.buildShape(true)!.onpaint(ctx)
     }
   }
 }

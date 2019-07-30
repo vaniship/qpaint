@@ -1,11 +1,16 @@
-import QShapeCreator from '../creator/shapecreator'
-import QPath from '../dom/path'
+import QShapeCreator from './ShapeCreator'
+import QPaintView from '../View'
+import QPath from '../dom/Path'
 import { Point } from '../dom/shape'
 
-class QFreePathCreator extends QShapeCreator {
+class QPathCreator extends QShapeCreator {
   private points: Array<Point> = []
   private fromPos: Point = { x: 0, y: 0 }
-  private close: boolean = false
+  private toPos: Point = { x: 0, y: 0 }
+
+  constructor(protected qview: QPaintView, public close: boolean) {
+    super(qview)
+  }
 
   reset() {
     super.reset()
@@ -18,24 +23,30 @@ class QFreePathCreator extends QShapeCreator {
     for (let i in this.points) {
       points.push(this.points[i])
     }
-    return new QPath(points, this.close, this.qview.style.clone())
+    return new QPath(this.getNextShapeId(), points, this.close, this.qview.style.clone())
   }
 
-  ondblclick(_: MouseEvent) {}
+  onmouseup(_: MouseEvent) {}
 
   onmousedown(event: MouseEvent) {
-    this.fromPos = this.qview.getMousePos(event)
-    this.started = true
+    this.toPos = this.qview.getMousePos(event)
+    if (this.started) {
+      this.points.push(this.toPos)
+    } else {
+      this.fromPos = this.toPos
+      this.started = true
+    }
+    this.qview.invalidate(null)
   }
 
   onmousemove(event: MouseEvent) {
     if (this.started) {
-      this.points.push(this.qview.getMousePos(event))
+      this.toPos = this.qview.getMousePos(event)
       this.qview.invalidate(null)
     }
   }
 
-  onmouseup(_: MouseEvent) {
+  ondblclick() {
     if (this.started) {
       this.qview.doc.addShape(this.buildShape())
       this.reset()
@@ -43,8 +54,13 @@ class QFreePathCreator extends QShapeCreator {
   }
 
   onkeydown(event: KeyboardEvent) {
-    if (event.keyCode == 27) { // keyEsc
-      this.reset()
+    switch (event.keyCode) {
+      case 13: // keyEnter
+        this.points.push({...this.toPos})
+        this.ondblclick()
+        break
+      case 27: // keyEsc
+        this.reset()
     }
   }
 
@@ -58,9 +74,13 @@ class QFreePathCreator extends QShapeCreator {
       for (let i in this.points) {
         ctx.lineTo(this.points[i].x, this.points[i].y)
       }
+      ctx.lineTo(this.toPos.x, this.toPos.y)
+      if (this.close) {
+        ctx.closePath()
+      }
       ctx.stroke()
     }
   }
 }
 
-export default QFreePathCreator
+export default QPathCreator

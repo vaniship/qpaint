@@ -1,6 +1,7 @@
-import QController from './controller'
-import QPaintDoc from './dom/doc'
+import QController from './Controller'
+import QPaintDoc from './dom/Doc'
 import { QShapeStyle, QShape } from './dom/shape'
+import QStore from './store/Store'
 
 type EventHandler = (evt: any) => void
 
@@ -15,7 +16,7 @@ class QPaintView {
   public onControllerReset: (()=>void)|null = null
   public doc: QPaintDoc
 
-  constructor(public drawing: HTMLCanvasElement) {
+  constructor(public drawing: HTMLCanvasElement, store: QStore) {
     drawing.onmousedown = (event) => {
       event.preventDefault()
       if (this._current && this._current.onmousedown !== null) {
@@ -48,7 +49,8 @@ class QPaintView {
       }
     }
     this.style = new QShapeStyle(1, 'black', 'white')
-    this.doc = new QPaintDoc()
+    this.doc = new QPaintDoc(store)
+    this.invalidate(null)
   }
 
   get currentKey() {

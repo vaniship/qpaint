@@ -1,4 +1,4 @@
-import QPaintView from '../view'
+import QPaintView from '../View'
 
 declare global {
   interface Window {
@@ -75,6 +75,7 @@ export default (container: HTMLElement, qview: QPaintView) => {
   function selection_setProp(key: string, val: any) {
     if (qview.selection !== null) {
       qview.selection.setProp(key, val)
+      qview.doc.store.saveShape(qview.selection)
       qview.invalidate(null)
     }
   }

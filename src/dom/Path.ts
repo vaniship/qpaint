@@ -1,8 +1,9 @@
-import { Point, Rect, QShapeBase, QShapeStyle, HitResult, hitLine, hitRect } from './shape'
+import { Point, Rect, QShapeStyle, HitResult, hitLine, hitRect } from './shape'
+import QShapeBase from './Base'
 
 class QPath extends QShapeBase {
-  constructor(private points: Array<Point>, private close: boolean, public style: QShapeStyle) {
-    super(style)
+  constructor(id: string, private points: Array<Point>, private close: boolean, public style: QShapeStyle) {
+    super(id, style)
   }
 
   bound(): Rect {

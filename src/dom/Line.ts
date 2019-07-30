@@ -1,11 +1,12 @@
-import { Point, QShapeBase, QShapeStyle, HitResult, hitLine, normalizeRect } from './shape'
+import { Point, QShapeStyle, HitResult, hitLine, normalizeRect } from './shape'
+import QShapeBase from './Base'
 
 class QLine extends QShapeBase {
   private pt1: Point
   private pt2: Point
 
-  constructor(point1: Point, point2: Point, public style: QShapeStyle) {
-    super(style)
+  constructor(id: string, point1: Point, point2: Point, public style: QShapeStyle) {
+    super(id, style)
     this.pt1 = point1
     this.pt2 = point2
   }

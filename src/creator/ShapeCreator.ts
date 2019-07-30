@@ -1,5 +1,5 @@
-import QController from '../controller'
-import QPaintView from '../view'
+import QController from '../Controller'
+import QPaintView from '../View'
 
 abstract class QShapeCreator implements QController {
   protected started: boolean = false
@@ -11,6 +11,10 @@ abstract class QShapeCreator implements QController {
   reset() {
     this.started = false
     this.qview.fireControllerReset()
+  }
+
+  getNextShapeId () {
+    return this.qview.doc.getNextShapeId()
   }
 
   abstract onmousedown(event: MouseEvent): void

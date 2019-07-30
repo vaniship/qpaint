@@ -1,8 +1,15 @@
-import { Point, QShapeBase, QShapeStyle, HitResult, fill } from './shape'
+import { Point, QShapeStyle, HitResult, fill } from './shape'
+import QShapeBase from './Base'
 
 class QEllipse extends QShapeBase {
-  constructor(private x: number, private y: number, private radiusX: number, private radiusY: number, public style: QShapeStyle) {
-    super(style)
+  constructor(id: string,
+    private x: number,
+    private y: number,
+    private radiusX: number,
+    private radiusY: number,
+    public style: QShapeStyle
+  ) {
+    super(id, style)
   }
 
   bound() {

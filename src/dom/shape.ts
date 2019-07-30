@@ -46,6 +46,13 @@ function normalizeRect(rect: RectByPoint): Rect {
   return { x: x, y: y, width: width, height: height }
 }
 
+function fill(ctx: CanvasRenderingContext2D, fillColor: string) {
+  if (fillColor != "null") {
+    ctx.fillStyle = fillColor
+    ctx.fill()
+  }
+}
+
 class QShapeStyle {
   [x: string]: any
   constructor(public lineWidth: number, public lineColor: string, public fillColor: string) {
@@ -62,32 +69,14 @@ class QShapeStyle {
 }
 
 interface QShape {
+  readonly id: string
   style: QShapeStyle
   setProp(key: string, val: any): void
   bound(): Rect
   hitTest(pt: Point): HitResult
   move(dx: number, dy: number): void
   onpaint(ctx: CanvasRenderingContext2D): void
-}
-
-abstract class QShapeBase implements QShape {
-  constructor(public style: QShapeStyle) {}
-
-  abstract bound(): Rect
-  abstract hitTest(pt: Point): HitResult
-  abstract move(dx: number, dy: number): void
-  abstract onpaint(ctx: CanvasRenderingContext2D): void
-
-  setProp(key: string, val: any): void {
-    this.style.setProp(key, val)
-  }
-}
-
-function fill(ctx: CanvasRenderingContext2D, fillColor: string) {
-  if (fillColor != "null") {
-    ctx.fillStyle = fillColor
-    ctx.fill()
-  }
+  toJSONString(): string
 }
 
 export {
@@ -97,7 +86,6 @@ export {
   HitResult,
   QShapeStyle,
   QShape,
-  QShapeBase,
   hitLine,
   hitRect,
   normalizeRect,

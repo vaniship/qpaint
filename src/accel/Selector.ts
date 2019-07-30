@@ -1,5 +1,5 @@
-import QController from '../controller'
-import QPaintView from '../view'
+import QController from '../Controller'
+import QPaintView from '../View'
 import { Point } from '../dom/shape'
 
 class QShapeSelector implements QController{
@@ -49,6 +49,7 @@ class QShapeSelector implements QController{
       if (selection != null) {
         let pt = this.qview.getMousePos(event)
         selection.move(pt.x - this.pt.x, pt.y - this.pt.y)
+        this.qview.doc.store.saveShape(selection)
       }
       this.reset()
     }

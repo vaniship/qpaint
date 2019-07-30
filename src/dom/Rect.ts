@@ -1,4 +1,5 @@
-import { Point, Rect, QShapeBase, QShapeStyle, HitResult, hitRect, fill } from './shape'
+import { Point, Rect, QShapeStyle, HitResult, hitRect, fill } from './shape'
+import QShapeBase from './Base'
 
 class QRect extends QShapeBase {
   private x: number
@@ -6,8 +7,8 @@ class QRect extends QShapeBase {
   private width: number
   private height: number
 
-  constructor(r: Rect, public style: QShapeStyle) {
-    super(style)
+  constructor(id: string, r: Rect, public style: QShapeStyle) {
+    super(id, style)
     this.x = r.x
     this.y = r.y
     this.width = r.width
