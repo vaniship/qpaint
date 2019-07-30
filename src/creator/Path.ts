@@ -56,7 +56,10 @@ class QPathCreator extends QShapeCreator {
   onkeydown(event: KeyboardEvent) {
     switch (event.keyCode) {
       case 13: // keyEnter
-        this.points.push({...this.toPos})
+        const n = this.points.length
+        if (n == 0 || this.points[n-1] !== this.toPos) {
+          this.points.push(this.toPos)
+        }
         this.ondblclick()
         break
       case 27: // keyEsc
