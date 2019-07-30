@@ -1,15 +1,8 @@
 import QStore from '../store/Store'
 import { Point, HitResult, QShape } from './shape'
 
-function deleteItem(array: Array<any>, item: any) {
-  let index = array.indexOf(item)
-  if (index !== -1) {
-    array.splice(index, 1)
-  }
-}
-
 class QPaintDoc {
-  private shapes: Array<any> = []
+  private shapes: Array<QShape> = []
   private idShapeBase: number = 0
   displayID: string = ''
 
@@ -45,7 +38,10 @@ class QPaintDoc {
 
   deleteShape(shape: QShape | null) {
     if (shape !== null) {
-      deleteItem(this.shapes, shape)
+      let index = this.shapes.indexOf(shape)
+      if (index !== -1) {
+        this.shapes.splice(index, 1)
+      }
       this.store.saveDocument(this)
     }
   }
